@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +54,12 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         login_button.setOnClickListener(this);
     }
 
+    private void save(final String token){
+        SharedPreferences.Editor editor = getSharedPreferences("token_record", MODE_PRIVATE).edit();
+        editor.putString("token", token);
+        editor.commit();
+    }
+
     private Handler handler = new Handler() {
 
         public void handleMessage(Message msg) {
@@ -60,11 +67,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                 case SHOW_RESPONSE:
                     String response = (String) msg.obj;
                     save(response);
-                    //Intent intent = new Intent(LoginActivity.this, ClassTable.class);
-                    //finish();
-                    //startActivity(intent);
 
-                    //responseText.setText(response);
             }
 
         }
@@ -76,10 +79,9 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
         Gson gson = new Gson();
         LoginJson json = gson.fromJson(jsondata, LoginJson.class);
-        if (Integer.valueOf(json.getId()).intValue() == 0) {
+        if (Integer.valueOf(json.getId()).intValue() == 1) {
             return null;
         }
-
         fin_json.append(json.getInformation());
         //return Token
         return fin_json.toString();
@@ -119,59 +121,14 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
     }
 
-    public void save(final String data) {
-        FileOutputStream out = null;
-        BufferedWriter writer = null;
-        try {
-            out = openFileOutput("token", Context.MODE_PRIVATE);
-            writer = new BufferedWriter(new OutputStreamWriter(out));
-            writer.write(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public String getFile() {
-        FileInputStream in = null;
-        BufferedReader reader = null;
-        StringBuilder content = new StringBuilder();
-        try {
-            in = openFileInput("token");
-            reader = new BufferedReader(new InputStreamReader(in));
-            String line = "";
-            while ((line = reader.readLine()) != null){
-                content.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return content.toString();
-    }
-
     private void Lgn(final String post_data) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //Toast.makeText(LoginActivity.this, "You clicked Button", Toast.LENGTH_SHORT).show();
+                HttpURLConnection connection = null;
                 try {
                     //Toast.makeText(LoginActivity.this, "You clicked Button", Toast.LENGTH_SHORT).show();
-                    HttpURLConnection connection = null;
+
                     URL url = new URL("http://114.215.84.22:8000/login");
                     connection=(HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("POST");
@@ -192,15 +149,15 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                     }
                     else {
                         message.obj = parseJSON(response.toString());
-                        handler.handleMessage(message);
+                        handler.sendMessage(message);
                     }
                 }
                 catch (Exception e){
-                    //Toast.makeText(LoginActivity.this, "You clicked aaaaaaaButton", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                } finally {
+                    connection.disconnect();
                 }
             }
         }).start();
     }
-
-
 }

@@ -1,26 +1,28 @@
 package com.example.junn.myapplication;
 
 /**
- * Created by junn on 16-4-2.
+ * Created by junn on 16-4-11.
  */
+
 public class RegisterJson {
-    private String id;
-    private String name;
 
-    public String getId(){
-        return id;
+    private String code;
+    private String information;
+
+    public String getCode(){
+        return code;
     }
 
-    public void setId(String id){
-        this.id = id;
+    public void setCode(String code){
+        this.code = code;
     }
 
-    public String getName(){
-        return name;
+    public String getInformation(){
+        return information;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setInformation(String information){
+        this.information = information;
     }
 
 }

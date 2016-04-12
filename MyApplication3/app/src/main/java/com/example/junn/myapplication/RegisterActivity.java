@@ -1,5 +1,10 @@
 package com.example.junn.myapplication;
 
+/**
+ * final
+ * Register Handler
+ */
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +29,6 @@ import java.net.URL;
 
 import com.google.gson.Gson;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.example.junn.myapplication.RegisterJson;
@@ -65,11 +69,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
     private String parseJSON(String jsondata){
         StringBuilder fin_json = new StringBuilder();
-
         Gson gson = new Gson();
         RegisterJson json = gson.fromJson(jsondata, RegisterJson.class);
-        fin_json.append(json.getName());
-        fin_json.append(json.getId());
+        fin_json.append(json.getCode());
         return fin_json.toString();
     }
 
@@ -134,7 +136,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     while((line = reader.readLine()) != null){
                         response.append(line);
                     }
-                    //parseJSON(response.toString());
                     Message message = new Message();
                     message.what = GET_INFO;
                     message.obj = parseJSON(response.toString());
