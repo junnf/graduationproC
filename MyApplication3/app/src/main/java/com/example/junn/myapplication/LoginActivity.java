@@ -66,6 +66,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
             switch (msg.what){
                 case SHOW_RESPONSE:
                     String response = (String) msg.obj;
+                    Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
                     save(response);
 
             }
@@ -145,7 +146,9 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                     message.what = SHOW_RESPONSE;
                     String _temp = null;
                     if (parseJSON(response.toString()).equals(_temp)) {
-                        return ;
+                        //return ;
+                        message.obj = parseJSON(response.toString());
+                        handler.sendMessage(message);
                     }
                     else {
                         message.obj = parseJSON(response.toString());

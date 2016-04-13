@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case FAIL_CHECK:
-                    Toast.makeText(MainActivity.this,"认证失败，请重新登录", Toast.LENGTH_SHORT).show();
+                    //String a = parseJSON(msg.obj.toString());
+                    Toast.makeText(MainActivity.this, "认证失败，请重新登录", Toast.LENGTH_SHORT).show();
                     break;
 
             }
@@ -79,7 +80,9 @@ public class MainActivity extends AppCompatActivity {
                     String code = parseJSON(response.toString());
                     /*if code is 0 , check successful, code is 1, check fail
                     * */
-                    if(code.equals('0')){
+                    message.obj = response;
+                    String _t = new String("0");
+                    if(code.equals(_t)){
                         message.what = GET_CHECK;
                         handler.sendMessage(message);
                     } else {
@@ -127,8 +130,16 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
-        if (!get_token().equals("None")) {
-            check(get_token());
-        }
+                //check(get_token());
+                String _temp = get_token();
+                if(_temp.equals("None")){
+                    Toast.makeText(MainActivity.this,"请登录，若无帐号请先注册", Toast.LENGTH_SHORT).show();
+                } else {
+                   check(_temp);
+                }
+        //if (!get_token().equals("None")) {
+        //    Toast.makeText(MainActivity.this,"认证失败，请重新登录", Toast.LENGTH_SHORT).show();
+        //    check(get_token());
+        //}
     }
 }
