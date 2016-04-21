@@ -4,15 +4,15 @@ package com.example.junn.myapplication;
  * Created by junn on 16-4-3.
  */
 public class LoginJson {
-    private String id;
+    private String code;
     private String information;
 
-    public String getId(){
-        return id;
+    public String getCode(){
+        return code;
     }
 
-    public void setId(String id){
-        this.id = id;
+    public void setCode(String code){
+        this.code = code;
     }
 
     public String getInformation(){

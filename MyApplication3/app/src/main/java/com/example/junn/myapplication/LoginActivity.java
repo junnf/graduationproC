@@ -27,7 +27,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-//import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,11 +79,10 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
         Gson gson = new Gson();
         LoginJson json = gson.fromJson(jsondata, LoginJson.class);
-        if (Integer.valueOf(json.getId()).intValue() == 1) {
-            return null;
+        if (Integer.valueOf(json.getCode()).intValue() >= 1) {
+            return "1";
         }
         fin_json.append(json.getInformation());
-        //return Token
         return fin_json.toString();
     }
 
@@ -144,9 +142,10 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                     }
                     Message message = new Message();
                     message.what = SHOW_RESPONSE;
-                    String _temp = null;
+                    String _temp = "1";
+                    //Toast.makeText(LoginActivity.this,response.toString(),Toast.LENGTH_SHORT).show();
                     if (parseJSON(response.toString()).equals(_temp)) {
-                        //return ;
+                        //Toast.makeText(LoginActivity.this,response.toString(),Toast.LENGTH_SHORT).show();
                         message.obj = parseJSON(response.toString());
                         handler.sendMessage(message);
                     }
